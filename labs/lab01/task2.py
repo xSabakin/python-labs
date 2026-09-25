@@ -32,57 +32,59 @@ resources_sorted = sorted(resources, key=lambda x: x[1])
 def check_access(user_id: str, resource_tuple: tuple) -> str:
     res_name, res_level = resource_tuple
 
-    u_str = f"{user_id:<12}"
-    r_str = f"{res_name:<19}"
+    user_str = f"{user_id:<12}"
+    resours_str = f"{res_name:<19}"
 
     if user_id not in users:
-        return f"user=[{u_str}] resource=[{r_str}] -> DENY (Користувача не існує)"
+        return f"user=[{user_str}] resource=[{resours_str}] -> DENY (Користувача не існує)"
 
     if user_id in blocked_users:
-        return f"user=[{u_str}] resource=[{r_str}] -> DENY (Заблокований)"
+        return f"user=[{user_str}] resource=[{resours_str}] -> DENY (Заблокований)"
 
     user_info = users[user_id]
 
     if not user_info.get("active", True):
-        return f"user=[{u_str}] resource=[{r_str}] -> DENY (Користувач не активний)"
+        return f"user=[{user_str}] resource=[{resours_str}] -> DENY (Користувач не активний)"
 
     if user_info["clearance"] >= res_level:
-        return f"user=[{u_str}] resource=[{r_str}] -> ALLOW"
+        return f"user=[{user_str}] resource=[{resours_str}] -> ALLOW"
     else:
-        return f"user=[{u_str}] resource=[{r_str}] -> DENY (Немає прав достопу)"
+        return f"user=[{user_str}] resource=[{resours_str}] -> DENY (Немає прав достопу)"
 
 print("═" * 78)
 
 all_test_users = list(users.keys()) + list(blocked_users - set(users.keys()))
+def main():
+    print("Ресурси (ВІД 1 ДО 4)")
+    for res_name, level in resources_sorted:
+        level_text = security_levels[level - 1]
+        print(f"- {res_name:<20} | Рівень: {level} ({level_text})")
 
-print("Ресурси (ВІД 1 ДО 4)")
-for res_name, level in resources_sorted:
-    level_text = security_levels[level - 1]
-    print(f"- {res_name:<20} | Рівень: {level} ({level_text})")
+    for user_id in all_test_users:
+        print("═" * 78)
 
-for user_id in all_test_users:
-    print("═" * 78)
+        if user_id in users:
+            u = users[user_id]
 
-    if user_id in users:
-        u = users[user_id]
+            # Визначаємо статус
+            if user_id in blocked_users:
+                status = "Заблокований"
+            elif not u.get("active", True):
+                status = "Неактивний "
+            else:
+                status = "Активний"
 
-        # Визначаємо статус
-        if user_id in blocked_users:
-            status = "Заблокований"
-        elif not u.get("active", True):
-            status = "Неактивний "
+            print(f"КОРИСТУВАЧ: {user_id}")
+            print(f"Роль: {u['role']:<13} | Допуск: {u['clearance']} | Відділ: {u['department']:<10} | Статус: {status}")
         else:
-            status = "Активний"
+            print(f"КОРИСТУВАЧ: {user_id}")
+            print("Статус: Відсутній у базі даних (Невідомий акаунт)")
 
-        print(f"КОРИСТУВАЧ: {user_id}")
-        print(f"Роль: {u['role']:<13} | Допуск: {u['clearance']} | Відділ: {u['department']:<10} | Статус: {status}")
-    else:
-        print(f"КОРИСТУВАЧ: {user_id}")
-        print("Статус: Відсутній у базі даних (Невідомий акаунт)")
+        print("─" * 78)
 
-    print("─" * 78)
+        for res in resources_sorted:
+            print(check_access(user_id, res))
 
-    for res in resources_sorted:
-        print(check_access(user_id, res))
-
-    print()
+        print()
+if __name__ == "__main__":
+    main()

@@ -90,12 +90,14 @@ sorted_passwords = sorted(
     evaluated_passwords,
     key=lambda item: category_priority[item["category"]]
 )
+def main():
+    # Виведення результатів у табличному форматі
+    print(f"Студент: {STUDENT_NAME} | Група {GROUP_NAME} | Варіант: {VARIANT_NUMBER}  ")
+    print("=" * 68)
+    print(f"{'№':<3} | {'Пароль':<18} | {'Довжина':<8} | {'Унікальний':<10} | {'Категорія':<15}")
+    print("-" * 68)
 
-# Виведення результатів у табличному форматі
-print(f"Студент: {STUDENT_NAME} | Група {GROUP_NAME} | Варіант: {VARIANT_NUMBER}  ")
-print("=" * 68)
-print(f"{'№':<3} | {'Пароль':<18} | {'Довжина':<8} | {'Унікальний':<10} | {'Категорія':<15}")
-print("-" * 68)
-
-for i, item in enumerate(sorted_passwords, start=1):
-    print(f"{i:<3} | {item['pwd']:<18} | {item['length']:<8} | {item['is_unique']:<10} | {item['category']:<15}")
+    for i, item in enumerate(sorted_passwords, start=1):
+        print(f"{i:<3} | {item['pwd']:<18} | {item['length']:<8} | {item['is_unique']:<10} | {item['category']:<15}")
+if __name__ == '__main__':
+    main()
