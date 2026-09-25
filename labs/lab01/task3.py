@@ -10,12 +10,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 
 from shared.student import STUDENT_NAME, GROUP_NAME, VARIANT_NUMBER
 
-# Параметри Варіанту 1
 print(f"Студент: {STUDENT_NAME} | Група {GROUP_NAME} | Варіант: {VARIANT_NUMBER}  ")
 PERSONAL_SALT = f"{VARIANT_NUMBER:05d}"
 MIN_PASSWORD_LENGTH = 12
 
-# ТУТ ВКАЖИ ШЛЯХИ ДО ТВОЇХ ІСНУЮЧИХ ФАЙЛІВ
 CSV_FILE = r"C:\Users\Sabakin\PycharmProjects\python-labs\labs\lab01\data\users.csv"
 JSON_LOG_FILE = r"C:\Users\Sabakin\PycharmProjects\python-labs\labs\lab01\data\log.json"
 
@@ -26,7 +24,7 @@ class ValidationError(Exception):
     pass
 
 
-# --- 1. Хешування ---
+# Хешування
 def generate_hash(password: str, salt: str = "00000") -> str:
     if not password or not salt:
         raise ValueError("Пароль або сіль не можуть бути порожніми (None або \"\").")
@@ -37,7 +35,7 @@ def generate_hash(password: str, salt: str = "00000") -> str:
     return hashlib.sha3_512(data.encode('utf-8')).hexdigest()
 
 
-# --- 3. Реєстрація користувачів (10 записів) ---
+# Реєстрація користувачів
 users_to_register = (
     ("admin", "SuperSecureAdminPass1"),
     ("john_doe", "JohnDoePass12345"),
@@ -68,7 +66,7 @@ def create_users(users_list):
             writer.writerow(user_data)
 
 
-# --- 4. Читання бази даних ---
+# Читання бази даних
 def read_db():
     global users_db
     users_db = []
@@ -88,7 +86,7 @@ def read_db():
         print(f"{user:<15} | {pwd_hash}")
 
 
-# --- 6. Логування подій (Декоратор) ---
+# Логування подій
 def log_event(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -129,13 +127,12 @@ def log_event(func):
     return wrapper
 
 
-# --- 5. Автентифікація ---
+# Автентифікація
 @log_event
 def login(username: str, password: str) -> bool:
     if not username or not password:
         raise ValueError("Логін або пароль не можуть бути порожніми.")
 
-    # Якщо пароль закороткий, generate_hash кине ValidationError, який ми зловимо в main()
     input_hash = generate_hash(password, PERSONAL_SALT)
 
     for db_user, db_hash in users_db:
@@ -144,7 +141,6 @@ def login(username: str, password: str) -> bool:
     return False
 
 
-# --- 7. та 8. Головна функція з обробкою винятків ---
 def main():
     try:
         print("=== 1. Додавання 10 користувачів у існуючий CSV ===")
@@ -155,17 +151,16 @@ def main():
         read_db()
         print("\n=== 3. Робимо 10 спроб входу (запишуться у JSON) ===")
 
-        # Рівно 10 спроб, які згенерують 10 логів у log.json
         attempts = [
             ("admin", "SuperSecureAdminPass1"),  # 1. Успіх
             ("john_doe", "JohnDoePass12345"),  # 2. Успіх
-            ("jane_smith", "WrongPassword123456"),  # 3. Невірний пароль (відмовлено)
+            ("jane_smith", "WrongPassword123456"),  # 3. Невірний пароль
             ("user_4", "PasswordForUser4"),  # 4. Успіх
             ("test_user", "TestPassword1234"),  # 5. Успіх
-            ("student1", "Short1"),  # 6. Короткий пароль -> викличе ValidationError
+            ("student1", "Short1"),  # викличе ValidationError
             ("developer", "DevPassword9876"),  # 7. Успіх
-            ("unknown_guy", "SomePassword12345"),  # 8. Неіснуючий юзер (відмовлено)
-            ("", "Password123456"),  # 9. Пустий логін -> викличе ValueError
+            ("unknown_guy", "SomePassword12345"),  # 8. Неіснуючий юзер
+            ("", "Password123456"),  # 9. Пустий логін
             ("support", "SupportPass12345")  # 10. Успіх
         ]
 
@@ -179,7 +174,7 @@ def main():
             except ValidationError as e:
                 print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> Перехоплено ValidationError: {e}")
 
-    # Перехоплення помилок роботи з файлами (вимоги Кроку 7)
+    # Перехоплення помилок роботи з файлами
     except (FileNotFoundError, PermissionError, IOError) as e:
         print(f"Помилка при роботі з файлами: {e}")
     except Exception as e:

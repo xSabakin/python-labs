@@ -29,12 +29,9 @@ blocked_users = {"contractor99", "temp_user", "suspended_acc"}
 # 2. Сортування ресурсів за числом від 1 до 4
 resources_sorted = sorted(resources, key=lambda x: x[1])
 
-
-# 3. Функція перевірки доступу з вирівняним форматом
 def check_access(user_id: str, resource_tuple: tuple) -> str:
     res_name, res_level = resource_tuple
 
-    # Фіксована ширина колонок для ідеальної табличної сітки
     u_str = f"{user_id:<12}"
     r_str = f"{res_name:<19}"
 
@@ -55,7 +52,7 @@ def check_access(user_id: str, resource_tuple: tuple) -> str:
         return f"user=[{u_str}] resource=[{r_str}] -> DENY (Немає прав достопу)"
 
 print("═" * 78)
-# 4. Красивий вивід із розділювачами та картками користувачів
+
 all_test_users = list(users.keys()) + list(blocked_users - set(users.keys()))
 
 print("Ресурси (ВІД 1 ДО 4)")
@@ -85,8 +82,7 @@ for user_id in all_test_users:
 
     print("─" * 78)
 
-    # Перевірка доступу до відсортованих ресурсів
     for res in resources_sorted:
         print(check_access(user_id, res))
 
-    print()  # Відступ між блоками * 68)
+    print()
