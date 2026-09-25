@@ -78,7 +78,7 @@ def read_db():
             for row in reader:
                 if row and len(row) == 2:
                     users_db.append(tuple(row))
-    except (PermissionError, IOError) as e:
+    except (FileNotFoundError,PermissionError, IOError) as e:
         print(f"Помилка читання CSV-файлу ({CSV_FILE}): {e}")
         return
 
@@ -142,23 +142,6 @@ def login(username: str, password: str) -> bool:
             return True
     return False
 
-
-def pre_run_check():
-    missing_files = []
-
-    if not os.path.exists(CSV_FILE):
-        missing_files.append(CSV_FILE)
-    if not os.path.exists(JSON_LOG_FILE):
-        missing_files.append(JSON_LOG_FILE)
-
-    if missing_files:
-        print("КРИТИЧНА ПОМИЛКА")
-        for file in missing_files:
-            print(f" -> Відсутній: {file}")
-        print("Скрипт зупинено. Спочатку створіть потрібні файли")
-        sys.exit(1)
-
-
 # Тепер main() чистий і відповідає лише за логіку виконання кроків
 def main():
     print("=== 1. Додавання 10 користувачів у існуючий CSV ===")
@@ -194,5 +177,4 @@ def main():
 
 
 if __name__ == "__main__":
-    pre_run_check()
     main()
