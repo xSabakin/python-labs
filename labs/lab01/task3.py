@@ -55,30 +55,32 @@ def create_user(username, password):
     return (username, hash_value)
 
 
+# Перенесли обробку файлових помилок сюди
 def create_users(users_list):
-    if not os.path.exists(CSV_FILE):
-        raise FileNotFoundError(f"Файл {CSV_FILE} не знайдено!")
+    try:
+        with open(CSV_FILE, mode="a", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            for username, password in users_list:
+                user_data = create_user(username, password)
+                writer.writerow(user_data)
+    except (PermissionError, IOError) as e:
+        print(f"Помилка запису у CSV-файл ({CSV_FILE}): {e}")
 
-    with open(CSV_FILE, mode="a", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        for username, password in users_list:
-            user_data = create_user(username, password)
-            writer.writerow(user_data)
 
-
-# Читання бази даних
+# Перенесли обробку файлових помилок сюди
 def read_db():
     global users_db
     users_db = []
 
-    if not os.path.exists(CSV_FILE):
-        raise FileNotFoundError(f"Файл {CSV_FILE} не знайдено!")
-
-    with open(CSV_FILE, mode="r", encoding="utf-8") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if row and len(row) == 2:
-                users_db.append(tuple(row))
+    try:
+        with open(CSV_FILE, mode="r", encoding="utf-8") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row and len(row) == 2:
+                    users_db.append(tuple(row))
+    except (PermissionError, IOError) as e:
+        print(f"Помилка читання CSV-файлу ({CSV_FILE}): {e}")
+        return
 
     print(f"{'Логін':<15} | {'Хеш пароля'}")
     print("-" * 145)
@@ -86,7 +88,7 @@ def read_db():
         print(f"{user:<15} | {pwd_hash}")
 
 
-# Логування подій
+# Перенесли обробку файлових помилок запису логів сюди
 def log_event(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -99,7 +101,7 @@ def log_event(func):
             return result
         except Exception as e:
             result_status = "failure"
-            raise e  # Прокидаємо помилку далі, щоб зловити її в main()
+            raise e
         finally:
             log_entry = {
                 "event": "login",
@@ -110,24 +112,24 @@ def log_event(func):
                 "kwargs": kwargs
             }
 
-            if not os.path.exists(JSON_LOG_FILE):
-                raise FileNotFoundError(f"Файл {JSON_LOG_FILE} не знайдено!")
+            try:
+                logs = []
+                if os.path.exists(JSON_LOG_FILE):
+                    with open(JSON_LOG_FILE, "r", encoding="utf-8") as f:
+                        try:
+                            logs = json.load(f)
+                        except json.JSONDecodeError:
+                            logs = []
 
-            with open(JSON_LOG_FILE, "r", encoding="utf-8") as f:
-                try:
-                    logs = json.load(f)
-                except json.JSONDecodeError:
-                    logs = []
-
-            logs.append(log_entry)
-
-            with open(JSON_LOG_FILE, "w", encoding="utf-8") as f:
-                json.dump(logs, f, indent=4, ensure_ascii=False)
+                logs.append(log_entry)
+                with open(JSON_LOG_FILE, "w", encoding="utf-8") as f:
+                    json.dump(logs, f, indent=4, ensure_ascii=False)
+            except (PermissionError, IOError) as e:
+                print(f"Помилка запису логу у JSON ({JSON_LOG_FILE}): {e}")
 
     return wrapper
 
 
-# Автентифікація
 @log_event
 def login(username: str, password: str) -> bool:
     if not username or not password:
@@ -141,45 +143,56 @@ def login(username: str, password: str) -> bool:
     return False
 
 
+def pre_run_check():
+    missing_files = []
+
+    if not os.path.exists(CSV_FILE):
+        missing_files.append(CSV_FILE)
+    if not os.path.exists(JSON_LOG_FILE):
+        missing_files.append(JSON_LOG_FILE)
+
+    if missing_files:
+        print("КРИТИЧНА ПОМИЛКА")
+        for file in missing_files:
+            print(f" -> Відсутній: {file}")
+        print("Скрипт зупинено. Спочатку створіть потрібні файли")
+        sys.exit(1)
+
+
+# Тепер main() чистий і відповідає лише за логіку виконання кроків
 def main():
-    try:
-        print("=== 1. Додавання 10 користувачів у існуючий CSV ===")
-        create_users(users_to_register)
-        print("Успішно!\n")
+    print("=== 1. Додавання 10 користувачів у існуючий CSV ===")
+    create_users(users_to_register)
+    print("Успішно!\n")
 
-        print("=== 2. Зчитування бази даних (CSV) ===")
-        read_db()
-        print("\n=== 3. Робимо 10 спроб входу (запишуться у JSON) ===")
+    print("=== 2. Зчитування бази даних (CSV) ===")
+    read_db()
+    print("\n=== 3. Робимо 10 спроб входу (запишуться у JSON) ===")
 
-        attempts = [
-            ("admin", "SuperSecureAdminPass1"),  # 1. Успіх
-            ("john_doe", "JohnDoePass12345"),  # 2. Успіх
-            ("jane_smith", "WrongPassword123456"),  # 3. Невірний пароль
-            ("user_4", "PasswordForUser4"),  # 4. Успіх
-            ("test_user", "TestPassword1234"),  # 5. Успіх
-            ("student1", "Short1"),  # викличе ValidationError
-            ("developer", "DevPassword9876"),  # 7. Успіх
-            ("unknown_guy", "SomePassword12345"),  # 8. Неіснуючий юзер
-            ("", "Password123456"),  # 9. Пустий логін
-            ("support", "SupportPass12345")  # 10. Успіх
-        ]
+    attempts = [
+        ("admin", "SuperSecureAdminPass1"),
+        ("john_doe", "JohnDoePass12345"),
+        ("jane_smith", "WrongPassword123456"),
+        ("user_4", "PasswordForUser4"),
+        ("test_user", "TestPassword1234"),
+        ("student1", "Short1"),
+        ("developer", "DevPassword9876"),
+        ("unknown_guy", "SomePassword12345"),
+        ("", "Password123456"),
+        ("support", "SupportPass12345")
+    ]
 
-        for i, (usr, pwd) in enumerate(attempts, 1):
-            try:
-                result = login(usr, pwd)
-                status = "Успішний вхід" if result else "Відмовлено (невірні дані)"
-                print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> {status}")
-            except ValueError as e:
-                print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> Перехоплено ValueError: {e}")
-            except ValidationError as e:
-                print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> Перехоплено ValidationError: {e}")
-
-    # Перехоплення помилок роботи з файлами
-    except (FileNotFoundError, PermissionError, IOError) as e:
-        print(f"Помилка при роботі з файлами: {e}")
-    except Exception as e:
-        print(f"Непередбачена помилка: {e}")
+    for i, (usr, pwd) in enumerate(attempts, 1):
+        try:
+            result = login(usr, pwd)
+            status = "Успішний вхід" if result else "Відмовлено (невірні дані)"
+            print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> {status}")
+        except ValueError as e:
+            print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> Перехоплено ValueError: {e}")
+        except ValidationError as e:
+            print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> Перехоплено ValidationError: {e}")
 
 
 if __name__ == "__main__":
+    pre_run_check()
     main()
