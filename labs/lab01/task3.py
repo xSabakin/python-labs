@@ -23,7 +23,6 @@ users_db = []
 class ValidationError(Exception):
     pass
 
-
 # Хешування
 def generate_hash(password: str, salt: str = "00000") -> str:
     if not password or not salt:
