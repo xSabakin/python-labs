@@ -63,12 +63,39 @@ def evaluate_password(pwd: str, criteria_dict: dict, forbidden_set: set, full_li
         else:
             return "Слабкий"
 
+# 5. Словник пріоритетів (від найсильнішого 1 до найслабшого 5)
+category_priority = {
+    "Дуже сильний": 1,
+    "Сильний": 2,
+    "Середній": 3,
+    "Слабкий": 4,
+    "Заборонений": 5
+}
+
+# Спочатку аналізуємо всі паролі та зберігаємо їх у список
+evaluated_passwords = []
+for pwd in passwords:
+    cat = evaluate_password(pwd, criteria, forbidden_passwords, passwords)
+    is_unique_str = "Так" if passwords.count(pwd) == 1 else "Ні"
+
+    evaluated_passwords.append({
+        "pwd": pwd,
+        "length": len(pwd),
+        "is_unique": is_unique_str,
+        "category": cat
+    })
+
+# Сортуємо список за пріоритетом категорії (від 1 до 5)
+sorted_passwords = sorted(
+    evaluated_passwords,
+    key=lambda item: category_priority[item["category"]]
+)
+
+# Виведення результатів у табличному форматі
 print(f"Студент: {STUDENT_NAME} | Група {GROUP_NAME} | Варіант: {VARIANT_NUMBER}  ")
 print("=" * 68)
 print(f"{'№':<3} | {'Пароль':<18} | {'Довжина':<8} | {'Унікальний':<10} | {'Категорія':<15}")
 print("-" * 68)
 
-for i, pwd in enumerate(passwords, start=1):
-    category = evaluate_password(pwd, criteria, forbidden_passwords, passwords)
-    is_unique_str = "Так" if passwords.count(pwd) == 1 else "Ні"
-    print(f"{i:<3} | {pwd:<18} | {len(pwd):<8} | {is_unique_str:<10} | {category:<15}")
+for i, item in enumerate(sorted_passwords, start=1):
+    print(f"{i:<3} | {item['pwd']:<18} | {item['length']:<8} | {item['is_unique']:<10} | {item['category']:<15}")
