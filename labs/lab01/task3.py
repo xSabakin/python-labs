@@ -62,7 +62,7 @@ def create_users(users_list):
             for username, password in users_list:
                 user_data = create_user(username, password)
                 writer.writerow(user_data)
-    except (PermissionError, IOError) as e:
+    except (FileNotFoundError, PermissionError, IOError) as e:
         print(f"Помилка запису у CSV-файл ({CSV_FILE}): {e}")
 
 
