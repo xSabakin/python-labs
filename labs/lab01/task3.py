@@ -24,7 +24,7 @@ class ValidationError(Exception):
     pass
 
 # Хешування
-def generate_hash(password: str, salt: str = "00000") -> str:
+def generate_hash(password: str, salt: str = "00001") -> str:
     if not password or not salt:
         raise ValueError("Пароль або сіль не можуть бути порожніми (None або \"\").")
     if len(password) < MIN_PASSWORD_LENGTH:
@@ -45,7 +45,7 @@ users_to_register = (
     ("developer", "DevPassword9876"),
     ("manager", "ManagerPass12345"),
     ("guest", "GuestPassword123"),
-    ("support", "SupportPass12345")
+    ("support", "SupportPajhgjgfkhgfjkhfkjhgfkhgfjkhgfkhjhkfghgfks")
 )
 
 
