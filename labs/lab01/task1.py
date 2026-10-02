@@ -101,3 +101,4 @@ def main():
         print(f"{i:<3} | {item['pwd']:<18} | {item['length']:<8} | {item['is_unique']:<10} | {item['category']:<15}")
 if __name__ == '__main__':
     main()
+

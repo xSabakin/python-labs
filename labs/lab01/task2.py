@@ -75,7 +75,8 @@ def main():
                 status = "Активний"
 
             print(f"КОРИСТУВАЧ: {user_id}")
-            print(f"Роль: {u['role']:<13} | Допуск: {u['clearance']} | Відділ: {u['department']:<10} | Статус: {status}")
+            print(f"Роль: {u['role']:<13} | Допуск: {u['clearance']}"
+                  f" | Відділ: {u['department']:<10} | Статус: {status}")
         else:
             print(f"КОРИСТУВАЧ: {user_id}")
             print("Статус: Відсутній у базі даних (Невідомий акаунт)")
