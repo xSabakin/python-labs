@@ -1,14 +1,14 @@
-import hashlib
 import csv
+import hashlib
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from functools import wraps
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
-from shared.student import STUDENT_NAME, GROUP_NAME, VARIANT_NUMBER
+from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
 
 print(f"Студент: {STUDENT_NAME} | Група {GROUP_NAME} | Варіант: {VARIANT_NUMBER}  ")
 PERSONAL_SALT = f"{VARIANT_NUMBER:05d}"
@@ -23,15 +23,18 @@ users_db = []
 class ValidationError(Exception):
     pass
 
+
 # Хешування
 def generate_hash(password: str, salt: str = "00001") -> str:
     if not password or not salt:
-        raise ValueError("Пароль або сіль не можуть бути порожніми (None або \"\").")
+        raise ValueError('Пароль або сіль не можуть бути порожніми (None або "").')
     if len(password) < MIN_PASSWORD_LENGTH:
-        raise ValidationError(f"Пароль коротший за мінімальну довжину ({MIN_PASSWORD_LENGTH} символів).")
+        raise ValidationError(
+            f"Пароль коротший за мінімальну довжину ({MIN_PASSWORD_LENGTH} символів)."
+        )
 
     data = password + salt
-    return hashlib.sha3_512(data.encode('utf-8')).hexdigest()
+    return hashlib.sha3_512(data.encode("utf-8")).hexdigest()
 
 
 # Реєстрація користувачів
@@ -45,7 +48,7 @@ users_to_register = (
     ("developer", "DevPassword9876"),
     ("manager", "ManagerPass12345"),
     ("guest", "GuestPassword123"),
-    ("support", "SupportPajhgjgfkhgfjkhfkjhgfkhgfjkhgfkhjhkfghgfks")
+    ("support", "SupportPajhgjgfkhgfjkhfkjhgfkhgfjkhgfkhjhkfghgfks"),
 )
 
 
@@ -62,7 +65,7 @@ def create_users(users_list):
             for username, password in users_list:
                 user_data = create_user(username, password)
                 writer.writerow(user_data)
-    except (FileNotFoundError, PermissionError, IOError) as e:
+    except (OSError, FileNotFoundError, PermissionError) as e:
         print(f"Помилка запису у CSV-файл ({CSV_FILE}): {e}")
 
 
@@ -77,7 +80,7 @@ def read_db():
             for row in reader:
                 if row and len(row) == 2:
                     users_db.append(tuple(row))
-    except (FileNotFoundError,PermissionError, IOError) as e:
+    except (OSError, FileNotFoundError, PermissionError) as e:
         print(f"Помилка читання CSV-файлу ({CSV_FILE}): {e}")
         return
 
@@ -91,24 +94,24 @@ def read_db():
 def log_event(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        username = args[0] if args else kwargs.get('username', 'unknown')
+        username = args[0] if args else kwargs.get("username", "unknown")
         result_status = "failure"
 
         try:
             result = func(*args, **kwargs)
             result_status = "success" if result else "failure"
             return result
-        except Exception as e:
+        except Exception:
             result_status = "failure"
-            raise e
+            raise
         finally:
             log_entry = {
                 "event": "login",
                 "user": username,
                 "result": result_status,
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
                 "args": list(args),
-                "kwargs": kwargs
+                "kwargs": kwargs,
             }
 
             try:
@@ -123,7 +126,7 @@ def log_event(func):
                 logs.append(log_entry)
                 with open(JSON_LOG_FILE, "w", encoding="utf-8") as f:
                     json.dump(logs, f, indent=4, ensure_ascii=False)
-            except (PermissionError, IOError) as e:
+            except (OSError, PermissionError) as e:
                 print(f"Помилка запису логу у JSON ({JSON_LOG_FILE}): {e}")
 
     return wrapper
@@ -140,6 +143,7 @@ def login(username: str, password: str) -> bool:
         if db_user == username and db_hash == input_hash:
             return True
     return False
+
 
 # Тепер main() чистий і відповідає лише за логіку виконання кроків
 def main():
@@ -161,7 +165,7 @@ def main():
         ("developer", "DevPassword9876"),
         ("unknown_guy", "SomePassword12345"),
         ("", "Password123456"),
-        ("support", "SupportPass12345")
+        ("support", "SupportPass12345"),
     ]
 
     for i, (usr, pwd) in enumerate(attempts, 1):
@@ -170,9 +174,13 @@ def main():
             status = "Успішний вхід" if result else "Відмовлено (невірні дані)"
             print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> {status}")
         except ValueError as e:
-            print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> Перехоплено ValueError: {e}")
+            print(
+                f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> Перехоплено ValueError: {e}"
+            )
         except ValidationError as e:
-            print(f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> Перехоплено ValidationError: {e}")
+            print(
+                f"Спроба {i:02d} | Логін: {usr or '<пустий>':<12} -> Перехоплено ValidationError: {e}"
+            )
 
 
 if __name__ == "__main__":
