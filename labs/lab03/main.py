@@ -1,4 +1,4 @@
-"""FastAPI-застосунок ЛР №3."""
+
 
 import logging
 import sqlite3
