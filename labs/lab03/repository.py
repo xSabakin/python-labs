@@ -1,4 +1,4 @@
-"""Параметризовані SQL-запити. Модуль не залежить від FastAPI."""
+
 
 import sqlite3
 from collections.abc import Iterator
