@@ -117,16 +117,25 @@ def analyze_logs(
         ],
         "detected_attacks": unique_alerts,
     }
+    try:
+        if report_format.lower() == "json":
+            with open(out_file, "w", encoding="utf-8") as f:
+                json.dump(report_data, f, indent=4, ensure_ascii=False)
+        elif report_format.lower() == "csv":
+            with open(out_file, "w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow(["IP", "AttackType", "Request"])
+                for alert in unique_alerts:
+                    writer.writerow([alert["ip"], alert["type"], alert["request"]])
 
-    if report_format.lower() == "json":
-        with open(out_file, "w", encoding="utf-8") as f:
-            json.dump(report_data, f, indent=4, ensure_ascii=False)
-    elif report_format.lower() == "csv":
-        with open(out_file, "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow(["IP", "AttackType", "Request"])
-            for alert in unique_alerts:
-                writer.writerow([alert["ip"], alert["type"], alert["request"]])
+        print(f"звіт успішно збережено{out_file}")
+
+    except IsADirectoryError:
+        print(f"Помилка: '{out_file}' є директорією, а не файлом.")
+    except OSError as e:
+        print(f"Помилка файлової системи (I/O) під час збереження: {e}")
+    except (TypeError, ValueError) as e:
+        print(f"Некоректні дані для збереження: {e}")
 
     logger.info(f"Analysis report saved to {out_file}")
 

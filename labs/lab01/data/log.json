@@ -1,0 +1,442 @@
+[
+    {
+        "event": "login",
+        "user": "admin",
+        "result": "success",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "admin",
+            "SuperSecureAdminPass1"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "john_doe",
+        "result": "success",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "john_doe",
+            "JohnDoePass12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "jane_smith",
+        "result": "failure",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "jane_smith",
+            "WrongPassword123456"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "user_4",
+        "result": "success",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "user_4",
+            "PasswordForUser4"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "test_user",
+        "result": "success",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "test_user",
+            "TestPassword1234"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "student1",
+        "result": "failure",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "student1",
+            "Short1"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "developer",
+        "result": "success",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "developer",
+            "DevPassword9876"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "unknown_guy",
+        "result": "failure",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "unknown_guy",
+            "SomePassword12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "",
+        "result": "failure",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "",
+            "Password123456"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "support",
+        "result": "failure",
+        "timestamp": "2026-10-02 09:03:20",
+        "args": [
+            "support",
+            "SupportPass12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "admin",
+        "result": "success",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "admin",
+            "SuperSecureAdminPass1"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "john_doe",
+        "result": "success",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "john_doe",
+            "JohnDoePass12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "jane_smith",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "jane_smith",
+            "WrongPassword123456"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "user_4",
+        "result": "success",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "user_4",
+            "PasswordForUser4"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "test_user",
+        "result": "success",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "test_user",
+            "TestPassword1234"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "student1",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "student1",
+            "Short1"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "developer",
+        "result": "success",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "developer",
+            "DevPassword9876"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "unknown_guy",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "unknown_guy",
+            "SomePassword12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "",
+            "Password123456"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "support",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:41:27",
+        "args": [
+            "support",
+            "SupportPass12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "admin",
+        "result": "success",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "admin",
+            "SuperSecureAdminPass1"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "john_doe",
+        "result": "success",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "john_doe",
+            "JohnDoePass12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "jane_smith",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "jane_smith",
+            "WrongPassword123456"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "user_4",
+        "result": "success",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "user_4",
+            "PasswordForUser4"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "test_user",
+        "result": "success",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "test_user",
+            "TestPassword1234"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "student1",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "student1",
+            "Short1"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "developer",
+        "result": "success",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "developer",
+            "DevPassword9876"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "unknown_guy",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "unknown_guy",
+            "SomePassword12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "",
+            "Password123456"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "support",
+        "result": "failure",
+        "timestamp": "2026-10-16 01:52:39",
+        "args": [
+            "support",
+            "SupportPass12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "admin",
+        "result": "success",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "admin",
+            "SuperSecureAdminPass1"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "john_doe",
+        "result": "success",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "john_doe",
+            "JohnDoePass12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "jane_smith",
+        "result": "failure",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "jane_smith",
+            "WrongPassword123456"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "user_4",
+        "result": "success",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "user_4",
+            "PasswordForUser4"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "test_user",
+        "result": "success",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "test_user",
+            "TestPassword1234"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "student1",
+        "result": "failure",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "student1",
+            "Short1"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "developer",
+        "result": "success",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "developer",
+            "DevPassword9876"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "unknown_guy",
+        "result": "failure",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "unknown_guy",
+            "SomePassword12345"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "",
+        "result": "failure",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "",
+            "Password123456"
+        ],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "support",
+        "result": "failure",
+        "timestamp": "2026-10-16 02:27:18",
+        "args": [
+            "support",
+            "SupportPass12345"
+        ],
+        "kwargs": {}
+    }
+]
