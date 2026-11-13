@@ -1,5 +1,3 @@
-"""Початкове заповнення бази з data/seed.json."""
-
 import json
 import sqlite3
 from contextlib import closing
