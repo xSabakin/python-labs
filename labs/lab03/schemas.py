@@ -1,9 +1,5 @@
-"""Pydantic-моделі запитів і відповідей."""
-
 from typing import Annotated, Literal
-
 from pydantic import BaseModel, ConfigDict, Field
-
 from labs.lab03 import config
 
 Status = Literal["new", "in_progress", "done"]
